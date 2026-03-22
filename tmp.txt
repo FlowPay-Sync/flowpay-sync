@@ -1,0 +1,212 @@
+            {/* POS Simulation */}
+            {showPOS && (
+              <Card className="shrink-0 border-orange-200 dark:border-orange-500/30 bg-linear-to-br from-orange-50 to-amber-50 dark:from-orange-500/10 dark:to-amber-500/10 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <CardHeader className="pb-2 pt-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-sm font-semibold text-orange-800 dark:text-orange-400">
+                    <CreditCard className="h-4 w-4" />
+                    {locale === "es" ? "Terminal Fiserv POS" : "Fiserv POS Terminal"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-4">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                    <div className="relative w-32 h-24 rounded-lg overflow-hidden shadow-lg shrink-0 bg-white">
+                      <Image
+                        src="/images/fiserv-pos.png"
+                        alt="Fiserv POS Terminal"
+                        fill
+                        className="object-contain p-1"
+                      />
+                      {/* POS screen overlay */}
+                      <div 
+                        ref={posRef}
+                        className="absolute inset-0 flex items-center justify-center bg-black/70 transition-opacity duration-300"
+                        style={{ opacity: posState === "idle" ? 0 : 1 }}
+                      >
+                        <div className="text-center">
+                          {posState === "reading" && (
+                            <div className="animate-pulse">
+                              <CreditCard className="h-5 w-5 text-yellow-400 mx-auto mb-1" />
+                              <p className="text-[8px] text-yellow-400 font-mono">LEYENDO...</p>
+                            </div>
+                          )}
+                          {posState === "processing" && (
+                            <div className="animate-pulse">
+                              <RefreshCw className="h-5 w-5 text-cyan-400 mx-auto mb-1 animate-spin" />
+                              <p className="text-[8px] text-cyan-400 font-mono">PROCESANDO</p>
+                            </div>
+                          )}
+                          {posState === "approved" && (
+                            <div className="animate-bounce">
+                              <CheckCircle2 className="h-6 w-6 text-emerald-400 mx-auto mb-1" />
+                              <p className="text-[8px] text-emerald-400 font-mono font-bold">APROBADO</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0 w-full">
+                      <div className="space-y-2">
+                        <div className={`flex items-start gap-2 text-xs ${posState === "reading" || posState === "processing" || posState === "approved" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
+                          <div className={`h-2 w-2 rounded-full shrink-0 mt-1 ${posState !== "idle" ? "bg-emerald-500 animate-pulse" : "bg-gray-400 dark:bg-gray-600"}`} />
+                          <span className="leading-tight">{locale === "es" ? "Terminal conectado" : "Terminal connected"}</span>
+                        </div>
+                        <div className={`flex items-start gap-2 text-xs ${posState === "reading" || posState === "processing" || posState === "approved" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
+                          <div className={`h-2 w-2 rounded-full shrink-0 mt-1 ${posState === "reading" || posState === "processing" || posState === "approved" ? "bg-emerald-500" : "bg-gray-400 dark:bg-gray-600"}`} />
+                          <span className="leading-tight">{locale === "es" ? "Tarjeta detectada" : "Card detected"}</span>
+                        </div>
+                        <div className={`flex items-start gap-2 text-xs ${posState === "approved" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
+                          <div className={`h-2 w-2 rounded-full shrink-0 mt-1 ${posState === "approved" ? "bg-emerald-500" : "bg-gray-400 dark:bg-gray-600"}`} />
+                          <span className="leading-tight">{locale === "es" ? "Transacción completada" : "Transaction complete"}</span>
+                        </div>
+                      </div>
+                      {paymentLink && (
+                        <div className="mt-3 rounded bg-gray-900 px-2 py-1.5 font-mono text-[10px] text-emerald-400 break-all w-full">
+                          <span className="text-gray-400">MONTO:</span> ${paymentLink.amount.toFixed(2)} USD
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Examples */}
+            <Card className="border-border/50 bg-card/80">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <MessageSquare className="h-4 w-4 text-violet-600" />
+                  {t("demo_examples_title")}
+                  <span className="ml-auto text-[10px] font-normal text-muted-foreground">{t("demo_examples_desc")}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="grid grid-cols-2 gap-2">
+                  {quickReplies.map((ex, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleQuickReply(ex)}
+                      disabled={isProcessing || orderComplete}
+                      className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-2 text-left text-xs transition-all hover:border-violet-300 hover:bg-violet-50 disabled:opacity-50 disabled:cursor-not-allowed group"
+                    >
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-[10px] font-bold text-violet-700 group-hover:bg-violet-200">
+                        {i + 1}
+                      </div>
+                      <span className="text-foreground/80 leading-tight truncate">{ex}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Guide */}
+                <div className="mt-3 rounded-lg border border-violet-200 bg-violet-50 p-2.5">
+                  <p className="text-[10px] font-semibold text-violet-700">{t("demo_guide_label")} — {guideContent[currentStep - 1].title}</p>
+                  <p className="text-[10px] text-violet-600 leading-relaxed mt-0.5">{guideContent[currentStep - 1].desc}</p>
+                </div>
+
+                {paymentLink && !orderComplete && (
+                  <button
+                    onClick={() => navigator.clipboard.writeText(paymentLink.url).catch(console.error)}
+                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-2 py-1.5 text-[10px] font-medium text-cyan-700 transition-colors hover:bg-cyan-100"
+                  >
+                    <Copy className="h-3 w-3" />
+                    {t("demo_pay_copy")}
+                  </button>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* System Activity */}
+            {systemEvents.length > 1 && (
+            <Card className="border-border/50 bg-card/80 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <Server className="h-4 w-4 text-cyan-600" />
+                  {t("demo_activity_title")}
+                  <span className="ml-auto flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                    <span className="text-[10px] font-normal text-muted-foreground">{t("demo_activity_desc")}</span>
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="max-h-[180px] space-y-1.5 overflow-y-auto pr-1">
+                  {systemEvents.map((event) => (
+                    <div key={event.id} className="flex items-start gap-2">
+                      <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${getEventColor(event.type, event.status)}`}>
+                        {event.status === "processing"
+                          ? <RefreshCw className="h-2.5 w-2.5 animate-spin" />
+                          : getEventIcon(event.type)
+                        }
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[11px] font-semibold text-foreground truncate">{event.title}</p>
+                          <span className="shrink-0 text-[9px] text-muted-foreground" suppressHydrationWarning>{event.time}</span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground leading-snug truncate">{event.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={eventsEndRef} />
+                </div>
+              </CardContent>
+            </Card>
+            )}
+
+            {/* Architecture */}
+            {systemEvents.some(e => e.type === "ai") && (
+            <Card className="border-border/50 bg-card/80 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <Zap className="h-4 w-4 text-amber-500" />
+                  {t("demo_arch_title")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="flex items-center justify-between gap-1.5">
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 1 ? "border-green-300 bg-green-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 1 ? "bg-green-500" : "bg-muted"}`}>
+                      <MessageSquare className={`h-3 w-3 ${currentStep >= 1 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 1 ? "text-green-700" : "text-muted-foreground"}`}>
+                      WhatsApp
+                    </span>
+                  </div>
+
+                  <ArrowDown className={`h-3 w-3 shrink-0 rotate-[-90deg] ${currentStep >= 2 ? "text-violet-500" : "text-muted-foreground/30"}`} />
+
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 2 ? "border-violet-300 bg-violet-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 2 ? "bg-linear-to-br from-violet-600 to-cyan-600" : "bg-muted"}`}>
+                      <Sparkles className={`h-3 w-3 ${currentStep >= 2 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 2 ? "text-violet-700" : "text-muted-foreground"}`}>
+                      FlowPay AI
+                    </span>
+                  </div>
+
+                  <ArrowDown className={`h-3 w-3 shrink-0 rotate-[-90deg] ${currentStep >= 4 ? "text-orange-500" : "text-muted-foreground/30"}`} />
+
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 4 ? "border-orange-300 bg-orange-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 4 ? "bg-orange-500" : "bg-muted"}`}>
+                      <CreditCard className={`h-3 w-3 ${currentStep >= 4 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 4 ? "text-orange-700" : "text-muted-foreground"}`}>
+                      Fiserv POS
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            )}
+
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}

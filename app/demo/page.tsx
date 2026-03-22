@@ -383,12 +383,12 @@ export default function DemoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-background to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-violet-50 via-background to-cyan-50">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-border/50 bg-card/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-cyan-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-violet-600 to-cyan-600">
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div className="hidden sm:block">
@@ -423,7 +423,7 @@ export default function DemoPage() {
               </Button>
             </Link>
             <Link href="/dashboard">
-              <Button size="sm" className="gap-1.5 bg-gradient-to-r from-violet-600 to-cyan-600 text-white hover:opacity-90">
+              <Button size="sm" className="gap-1.5 bg-linear-to-r from-violet-600 to-cyan-600 text-white hover:opacity-90">
                 Dashboard
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
@@ -456,11 +456,11 @@ export default function DemoPage() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:h-[calc(100vh-10rem)]">
 
           {/* Left: Phone mockup — static, never scrolls */}
-          <div className="flex-shrink-0 self-start lg:sticky lg:top-24">
-            <div className="relative w-[280px] rounded-[2.5rem] border-[10px] border-gray-900 bg-gray-900 shadow-2xl mx-auto lg:mx-0">
+          <div className="shrink-0 self-start lg:sticky lg:top-24">
+            <div className="relative w-70 rounded-[2.5rem] border-10 border-gray-900 bg-gray-900 shadow-2xl mx-auto lg:mx-0">
               <div className="absolute left-1/2 top-0 z-10 h-5 w-24 -translate-x-1/2 rounded-b-xl bg-gray-900" />
 
-              <div className="relative h-[580px] overflow-hidden rounded-[1.8rem] bg-white">
+              <div className="relative h-145 overflow-hidden rounded-[1.8rem] bg-white">
                 {/* Status bar */}
                 <div className="flex items-center justify-between bg-[#075e54] px-4 py-1 text-white">
                   <span className="text-[10px] font-medium" suppressHydrationWarning>{clockTime || "00:00"}</span>
@@ -552,7 +552,7 @@ export default function DemoPage() {
                     {paymentLink && !orderComplete && (
                       <div className="flex justify-start">
                         <div className="w-[85%] overflow-hidden rounded-lg bg-white shadow-sm">
-                          <div className="bg-gradient-to-r from-violet-600 to-cyan-600 px-2 py-1">
+                          <div className="bg-linear-to-r from-violet-600 to-cyan-600 px-2 py-1">
                             <p className="text-[9px] font-medium text-white">{t("demo_pay_title")}</p>
                           </div>
                           <div className="p-2">
@@ -561,7 +561,7 @@ export default function DemoPage() {
                             <button
                               onClick={simulatePayment}
                               disabled={isProcessing}
-                              className="w-full rounded bg-gradient-to-r from-violet-600 to-cyan-600 py-1 text-[9px] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                              className="w-full rounded bg-linear-to-r from-violet-600 to-cyan-600 py-1 text-[9px] font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
                               {t("demo_pay_btn")}
                             </button>
@@ -594,7 +594,7 @@ export default function DemoPage() {
                     {orderComplete ? (
                       <button
                         onClick={resetDemo}
-                        className="flex-1 rounded-full bg-gradient-to-r from-violet-600 to-cyan-600 py-1.5 text-[10px] font-semibold text-white"
+                        className="flex-1 rounded-full bg-linear-to-r from-violet-600 to-cyan-600 py-1.5 text-[10px] font-semibold text-white"
                       >
                         {t("demo_reset")}
                       </button>
@@ -624,7 +624,7 @@ export default function DemoPage() {
 
             {/* Input below phone */}
             {!orderComplete && (
-              <div className="mt-4 w-[280px] mx-auto lg:mx-0">
+              <div className="mt-4 w-70 mx-auto lg:mx-0">
                 <div className="flex gap-2">
                   <Input
                     value={inputValue}
@@ -638,7 +638,7 @@ export default function DemoPage() {
                     size="sm"
                     onClick={() => { if (!isProcessing && inputValue.trim()) { processOrder(inputValue); setInputValue("") } }}
                     disabled={isProcessing || !inputValue.trim()}
-                    className="shrink-0 bg-gradient-to-r from-violet-600 to-cyan-600 text-white hover:opacity-90"
+                    className="shrink-0 bg-linear-to-r from-violet-600 to-cyan-600 text-white hover:opacity-90"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
@@ -650,9 +650,139 @@ export default function DemoPage() {
           {/* Right panel — has its own scroll */}
           <div className="flex flex-1 flex-col gap-4 min-w-0 lg:overflow-y-auto lg:max-h-[calc(100vh-10rem)] lg:pr-1">
 
+            {/* Examples */}
+            <Card className="border-border/50 bg-card/80">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <MessageSquare className="h-4 w-4 text-violet-600" />
+                  {t("demo_examples_title")}
+                  <span className="ml-auto text-[10px] font-normal text-muted-foreground">{t("demo_examples_desc")}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="grid grid-cols-2 gap-2">
+                  {quickReplies.map((ex, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleQuickReply(ex)}
+                      disabled={isProcessing || orderComplete}
+                      className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-2 text-left text-xs transition-all hover:border-violet-300 hover:bg-violet-50 disabled:opacity-50 disabled:cursor-not-allowed group"
+                    >
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-[10px] font-bold text-violet-700 group-hover:bg-violet-200">
+                        {i + 1}
+                      </div>
+                      <span className="text-foreground/80 leading-tight truncate">{ex}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Guide */}
+                <div className="mt-3 rounded-lg border border-violet-200 bg-violet-50 p-2.5">
+                  <p className="text-[10px] font-semibold text-violet-700">{t("demo_guide_label")} — {guideContent[currentStep - 1].title}</p>
+                  <p className="text-[10px] text-violet-600 leading-relaxed mt-0.5">{guideContent[currentStep - 1].desc}</p>
+                </div>
+
+                {paymentLink && !orderComplete && (
+                  <button
+                    onClick={() => navigator.clipboard.writeText(paymentLink.url)}
+                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-2 py-1.5 text-[10px] font-medium text-cyan-700 transition-colors hover:bg-cyan-100"
+                  >
+                    <Copy className="h-3 w-3" />
+                    {t("demo_pay_copy")}
+                  </button>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* System Activity */}
+            <Card className="border-border/50 bg-card/80">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <Server className="h-4 w-4 text-cyan-600" />
+                  {t("demo_activity_title")}
+                  <span className="ml-auto flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                    <span className="text-[10px] font-normal text-muted-foreground">{t("demo_activity_desc")}</span>
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="max-h-45 space-y-1.5 overflow-y-auto pr-1">
+                  {systemEvents.map((event) => (
+                    <div key={event.id} className="flex items-start gap-2">
+                      <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${getEventColor(event.type, event.status)}`}>
+                        {event.status === "processing"
+                          ? <RefreshCw className="h-2.5 w-2.5 animate-spin" />
+                          : getEventIcon(event.type)
+                        }
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[11px] font-semibold text-foreground truncate">{event.title}</p>
+                          <span className="shrink-0 text-[9px] text-muted-foreground" suppressHydrationWarning>{event.time}</span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground leading-snug truncate">{event.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={eventsEndRef} />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Architecture */}
+            <Card className="border-border/50 bg-card/80">
+              <CardHeader className="pb-2 pt-3 px-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <Zap className="h-4 w-4 text-amber-500" />
+                  {t("demo_arch_title")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="flex items-center justify-between gap-1.5">
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 1 ? "border-green-300 bg-green-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 1 ? "bg-green-500" : "bg-muted"}`}>
+                      <MessageSquare className={`h-3 w-3 ${currentStep >= 1 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 1 ? "text-green-700" : "text-muted-foreground"}`}>
+                      WhatsApp
+                    </span>
+                  </div>
+
+                  <ArrowDown className={`h-3 w-3 shrink-0 -rotate-90 ${currentStep >= 2 ? "text-violet-500" : "text-muted-foreground/30"}`} />
+
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 2 ? "border-violet-300 bg-violet-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 2 ? "bg-linear-to-br from-violet-600 to-cyan-600" : "bg-muted"}`}>
+                      <Sparkles className={`h-3 w-3 ${currentStep >= 2 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 2 ? "text-violet-700" : "text-muted-foreground"}`}>
+                      FlowPay AI
+                    </span>
+                  </div>
+
+                  <ArrowDown className={`h-3 w-3 shrink-0 -rotate-90 ${currentStep >= 4 ? "text-orange-500" : "text-muted-foreground/30"}`} />
+
+                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
+                    currentStep >= 4 ? "border-orange-300 bg-orange-50" : "border-border bg-muted/30"
+                  }`}>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 4 ? "bg-orange-500" : "bg-muted"}`}>
+                      <CreditCard className={`h-3 w-3 ${currentStep >= 4 ? "text-white" : "text-muted-foreground"}`} />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${currentStep >= 4 ? "text-orange-700" : "text-muted-foreground"}`}>
+                      Fiserv POS
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* POS Simulation */}
             {showPOS && (
-              <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 overflow-hidden">
+              <Card className="shrink-0 border-orange-200 bg-linear-to-br from-orange-50 to-amber-50 overflow-hidden mb-6">
                 <CardHeader className="pb-2 pt-3 px-4">
                   <CardTitle className="flex items-center gap-2 text-sm font-semibold text-orange-800">
                     <CreditCard className="h-4 w-4" />
@@ -660,8 +790,8 @@ export default function DemoPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 pb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-32 h-24 rounded-lg overflow-hidden shadow-lg">
+                  <div className="flex items-center gap-5">
+                    <div className="relative w-40 h-28 rounded-lg overflow-hidden shadow-lg shrink-0">
                       <Image
                         src="/images/fiserv-pos.png"
                         alt="Fiserv POS Terminal"
@@ -722,135 +852,7 @@ export default function DemoPage() {
               </Card>
             )}
 
-            {/* Examples */}
-            <Card className="border-border/50 bg-card/80">
-              <CardHeader className="pb-2 pt-3 px-4">
-                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-                  <MessageSquare className="h-4 w-4 text-violet-600" />
-                  {t("demo_examples_title")}
-                  <span className="ml-auto text-[10px] font-normal text-muted-foreground">{t("demo_examples_desc")}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pb-4">
-                <div className="grid grid-cols-2 gap-2">
-                  {quickReplies.map((ex, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleQuickReply(ex)}
-                      disabled={isProcessing || orderComplete}
-                      className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-2 text-left text-xs transition-all hover:border-violet-300 hover:bg-violet-50 disabled:opacity-50 disabled:cursor-not-allowed group"
-                    >
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-[10px] font-bold text-violet-700 group-hover:bg-violet-200">
-                        {i + 1}
-                      </div>
-                      <span className="text-foreground/80 leading-tight truncate">{ex}</span>
-                    </button>
-                  ))}
-                </div>
 
-                {/* Guide */}
-                <div className="mt-3 rounded-lg border border-violet-200 bg-violet-50 p-2.5">
-                  <p className="text-[10px] font-semibold text-violet-700">{t("demo_guide_label")} — {guideContent[currentStep - 1].title}</p>
-                  <p className="text-[10px] text-violet-600 leading-relaxed mt-0.5">{guideContent[currentStep - 1].desc}</p>
-                </div>
-
-                {paymentLink && !orderComplete && (
-                  <button
-                    onClick={() => navigator.clipboard.writeText(paymentLink.url)}
-                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-2 py-1.5 text-[10px] font-medium text-cyan-700 transition-colors hover:bg-cyan-100"
-                  >
-                    <Copy className="h-3 w-3" />
-                    {t("demo_pay_copy")}
-                  </button>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* System Activity */}
-            <Card className="border-border/50 bg-card/80">
-              <CardHeader className="pb-2 pt-3 px-4">
-                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-                  <Server className="h-4 w-4 text-cyan-600" />
-                  {t("demo_activity_title")}
-                  <span className="ml-auto flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                    <span className="text-[10px] font-normal text-muted-foreground">{t("demo_activity_desc")}</span>
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pb-4">
-                <div className="max-h-[180px] space-y-1.5 overflow-y-auto pr-1">
-                  {systemEvents.map((event) => (
-                    <div key={event.id} className="flex items-start gap-2">
-                      <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${getEventColor(event.type, event.status)}`}>
-                        {event.status === "processing"
-                          ? <RefreshCw className="h-2.5 w-2.5 animate-spin" />
-                          : getEventIcon(event.type)
-                        }
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-[11px] font-semibold text-foreground truncate">{event.title}</p>
-                          <span className="shrink-0 text-[9px] text-muted-foreground" suppressHydrationWarning>{event.time}</span>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground leading-snug truncate">{event.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={eventsEndRef} />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Architecture */}
-            <Card className="border-border/50 bg-card/80">
-              <CardHeader className="pb-2 pt-3 px-4">
-                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
-                  <Zap className="h-4 w-4 text-amber-500" />
-                  {t("demo_arch_title")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pb-4">
-                <div className="flex items-center justify-between gap-1.5">
-                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
-                    currentStep >= 1 ? "border-green-300 bg-green-50" : "border-border bg-muted/30"
-                  }`}>
-                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 1 ? "bg-green-500" : "bg-muted"}`}>
-                      <MessageSquare className={`h-3 w-3 ${currentStep >= 1 ? "text-white" : "text-muted-foreground"}`} />
-                    </div>
-                    <span className={`text-[9px] font-semibold ${currentStep >= 1 ? "text-green-700" : "text-muted-foreground"}`}>
-                      WhatsApp
-                    </span>
-                  </div>
-
-                  <ArrowDown className={`h-3 w-3 shrink-0 rotate-[-90deg] ${currentStep >= 2 ? "text-violet-500" : "text-muted-foreground/30"}`} />
-
-                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
-                    currentStep >= 2 ? "border-violet-300 bg-violet-50" : "border-border bg-muted/30"
-                  }`}>
-                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 2 ? "bg-gradient-to-br from-violet-600 to-cyan-600" : "bg-muted"}`}>
-                      <Sparkles className={`h-3 w-3 ${currentStep >= 2 ? "text-white" : "text-muted-foreground"}`} />
-                    </div>
-                    <span className={`text-[9px] font-semibold ${currentStep >= 2 ? "text-violet-700" : "text-muted-foreground"}`}>
-                      FlowPay AI
-                    </span>
-                  </div>
-
-                  <ArrowDown className={`h-3 w-3 shrink-0 rotate-[-90deg] ${currentStep >= 4 ? "text-orange-500" : "text-muted-foreground/30"}`} />
-
-                  <div className={`flex flex-col items-center gap-1 rounded-lg border p-2 transition-all flex-1 ${
-                    currentStep >= 4 ? "border-orange-300 bg-orange-50" : "border-border bg-muted/30"
-                  }`}>
-                    <div className={`flex h-7 w-7 items-center justify-center rounded-full ${currentStep >= 4 ? "bg-orange-500" : "bg-muted"}`}>
-                      <CreditCard className={`h-3 w-3 ${currentStep >= 4 ? "text-white" : "text-muted-foreground"}`} />
-                    </div>
-                    <span className={`text-[9px] font-semibold ${currentStep >= 4 ? "text-orange-700" : "text-muted-foreground"}`}>
-                      Fiserv POS
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
           </div>
         </div>

@@ -1,0 +1,76 @@
+
+>             {/* POS Simulation */}
+              {showPOS && (
+                <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 overflow-hidden">
+                  <CardHeader className="pb-2 pt-3 px-4">
+                    <CardTitle className="flex items-center gap-2 text-sm font-semibold text-orange-800">
+                      <CreditCard className="h-4 w-4" />
+                      {locale === "es" ? "Terminal Fiserv POS" : "Fiserv POS Terminal"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-4 pb-4">
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-32 h-24 rounded-lg overflow-hidden shadow-lg">
+                        <Image
+                          src="/images/fiserv-pos.png"
+                          alt="Fiserv POS Terminal"
+                          fill
+                          className="object-cover"
+                        />
+                        {/* POS screen overlay */}
+                        <div 
+                          ref={posRef}
+                          className="absolute inset-0 flex items-center justify-center bg-black/60 transition-opacity duration-300"
+                          style={{ opacity: posState === "idle" ? 0 : 1 }}
+                        >
+                          <div className="text-center">
+                            {posState === "reading" && (
+                              <div className="animate-pulse">
+                                <CreditCard className="h-5 w-5 text-yellow-400 mx-auto mb-1" />
+                                <p className="text-[8px] text-yellow-400 font-mono">LEYENDO...</p>
+                              </div>
+                            )}
+                            {posState === "processing" && (
+                              <div className="animate-pulse">
+                                <RefreshCw className="h-5 w-5 text-cyan-400 mx-auto mb-1 animate-spin" />
+                                <p className="text-[8px] text-cyan-400 font-mono">PROCESANDO</p>
+                              </div>
+                            )}
+                            {posState === "approved" && (
+                              <div className="animate-bounce">
+                                <CheckCircle2 className="h-6 w-6 text-emerald-400 mx-auto mb-1" />
+                                <p className="text-[8px] text-emerald-400 font-mono font-bold">APROBADO</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="space-y-1.5">
+                          <div className={`flex items-center gap-2 text-xs ${posState === "reading" || posState === "processing" || posState === "approved" ? "text-emerald-600" : "text-muted-foreground"}`}>
+                            <div className={`h-2 w-2 rounded-full ${posState !== "idle" ? "bg-emerald-500 animate-pulse" : "bg-gray-300"}`} />
+                            {locale === "es" ? "Terminal conectado" : "Terminal connected"}
+                          </div>
+                          <div className={`flex items-center gap-2 text-xs ${posState === "reading" || posState === "processing" || posState === "approved" ? "text-emerald-600" : "text-muted-foreground"}`}>
+                            <div className={`h-2 w-2 rounded-full ${posState === "reading" || posState === "processing" || posState === "approved" ? "bg-emerald-500" : "bg-gray-300"}`} />
+                            {locale === "es" ? "Tarjeta detectada" : "Card detected"}
+                          </div>
+                          <div className={`flex items-center gap-2 text-xs ${posState === "approved" ? "text-emerald-600" : "text-muted-foreground"}`}>
+                            <div className={`h-2 w-2 rounded-full ${posState === "approved" ? "bg-emerald-500" : "bg-gray-300"}`} />
+                            {locale === "es" ? "Transaccion completada" : "Transaction complete"}
+                          </div>
+                        </div>
+                        {paymentLink && (
+                          <div className="mt-2 rounded bg-gray-900 px-2 py-1.5 font-mono text-[10px] text-emerald-400">
+                            <span className="text-gray-500">MONTO:</span> ${paymentLink.amount.toFixed(2)} USD
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+  
+              {/* Examples */}
+              <Card className="border-border/50 bg-card/80">
+
